@@ -2,8 +2,8 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/engines-1.1
-
-#ARG PROJECT_ID = project
+ARG PROJECT_ID_ARG
+ENV ENV_PROJECT_ID = $PROJECT_ID_ARG
 
 RUN apt-get update && \
     apt-get install -y \
@@ -104,7 +104,8 @@ RUN git clone https://github.com/nikokb/tpm2_iot_endpoint.git \
 	&& cd tpm2_iot_endpoint \
 	&& gcc gcs_auth.c -L/usr/lib/x86_64-linux-gnu/engines-1.1/ -lcrypto -ltpm2tss -lcjson -o gcs_auth \
 	&& mv gcs_auth .. \
-	&& mv tpm_persist_private.sh ..
+	&& mv tpm_persist_private.sh .. \
+	&& cd ..
 
-
-WORKDIR /auth
+RUN ["/bin/bash"]
+ENTRYPOINT ["sh","/auth/tpm_persist_private.sh $ENV_PROJECT_ID"]
