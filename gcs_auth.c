@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
   char *final = strcat(strcat(jwt, "."), b64sig);
 
   printf("%s\n", final);
-  FILE *outputFile = fopen("/usr/jwt", "w");
+  FILE *outputFile = fopen("/auth/jwt", "w");
   fprintf(outputFile, "%s", final);
   
   fclose(outputFile);
